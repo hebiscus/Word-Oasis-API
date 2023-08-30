@@ -1,5 +1,5 @@
 const blogPost = require("../models/blogPost");
-const Comment = require("../models/comment");
+const comment = require("../models/comment");
 const { body, validationResult } = require("express-validator");
 
 exports.posts_get = (async (req, res, next) => {
@@ -61,7 +61,6 @@ exports.onePost_update = [
     body("creationDate").isISO8601(),
     
     (async (req, res, next) => {
-        console.log("yup")
         const errors = validationResult(req);
         if(!errors.isEmpty()) {
             return res.status(403).json({errors: errors.array()})
@@ -88,22 +87,54 @@ exports.onePost_update = [
 ];
 
 exports.onePost_delete = (async (req, res, next) => {
+    try {
+        const blogpost = await blogPost.findByIdAndDelete(req.params.postId);
+        if (blogpost === null) {
+            return res.status(403).json("no blog post with this ID was found");
+        }
+        res.status(202).json({message: "blog post got deleted!", blogpost: blogpost});
+    } catch(err) {
+        console.log("error")
+        return next(err);
+    }
+})
+
+exports.comments_get = (async (req, res, next) => {
+    try {
+        const comments = await comment.find({blogpost: req.params.postId});
+        if (comments.length === 0) {
+            return res.status(403).json("no comments found for this blog post");
+        }
+        res.status(202).json({comments: comments});
+    } catch(err) {
+        return next(err);
+    }
+});
+
+exports.comments_create = [
+    body("author").trim().escape().isLength({min: 1, max: 30}).withMessage("author's name should be between 1 and 30 characters"),
+    body("content").trim().escape().isLength({min: 3, max: 300}).withMessage("comment should be between 3 and 300 characters"),
+    
+    (async (req, res, next) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(403).json({errors: errors.array()});
+        }
+
         try {
-            const blogpost = await blogPost.findByIdAndDelete(req.params.postId);
+            const blogpost = await blogPost.findById(req.params.postId);
             if (blogpost === null) {
                 return res.status(403).json("no blog post with this ID was found");
             }
-            res.status(202).json({message: "blog post got deleted!", blogpost: blogpost});
+            const newComment = new comment({
+                blogpost: blogpost,
+                author: req.body.author,
+                content: req.body.content,
+            })
+            await newComment.save();
+            res.status(202).json({message: "comment successfully posted!", comment: newComment});
         } catch(err) {
-            console.log("error")
             return next(err);
         }
     })
-
-exports.comments_get = (async (req, res, next) => {
-
-});
-
-exports.comments_create = (async (req, res, next) => {
-
-});
+];

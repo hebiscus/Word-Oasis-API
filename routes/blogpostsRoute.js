@@ -13,8 +13,8 @@ router.put("/:postId/update", passport.authenticate('jwt', { session: false }), 
 
 router.delete("/:postId/delete", passport.authenticate('jwt', { session: false }), blogPostController.onePost_delete);
 
-// router.get("/:postId/comments", blogPostController.comments_get);
+router.get("/:postId/comments", blogPostController.comments_get);
 
-// router.post("/:postId/comments", blogPostController.comments_create);
+router.post("/:postId/comments", blogPostController.comments_create);
 
 module.exports = router;
