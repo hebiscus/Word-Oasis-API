@@ -19,7 +19,6 @@ router.post("/log-in", (async(req, res, next) => {
     let {name, password } = req.body;
     try {
         const admin = await Admin.findOne({name: name});
-        console.log(admin)
         if (!admin) {
             return res.status(401).json({message: "Bad admin name!"})
         }
