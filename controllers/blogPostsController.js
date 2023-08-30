@@ -27,8 +27,7 @@ exports.posts_create = [
         }
         try {
             const newPost = new blogPost({
-                // admin has to be stored on the frontend
-                // author: req.admin,
+                author: req.user,
                 title: req.body.title,
                 content: req.body.content,
                 status: req.body.status,
@@ -44,16 +43,61 @@ exports.posts_create = [
 ];
 
 exports.onePost_get = (async (req, res, next) => {
-
+    try {
+        const blogpost = await blogPost.findById(req.params.id).populate("author").exec();
+        if (blogpost === null) {
+            return res.status(403).json("no blog post with this ID was found");
+        }
+        res.status(202).json({blogpost: blogpost});
+    } catch(err) {
+        return next(err);
+    }
 });
 
-exports.onePost_update = (async (req, res, next) => {
+exports.onePost_update = [
+    body("title").trim().escape().isLength({min: 2, max: 80}).withMessage("title should be between 2 and 80 characters"),
+    body("content").trim().escape().isLength({min: 2, max: 20000}).withMessage("blog post should be between 2 and 20 000 characters"),
+    body("status").isIn(["unpublished", "published"]).withMessage("invalid status value"),
+    body("creationDate").isISO8601(),
+    
+    (async (req, res, next) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(403).json({errors: errors.array()})
+        }
+        
+        const updatedPost = new blogPost({
+            author: req.user,
+            title: req.body.title,
+            content: req.body.content,
+            status: req.body.status,
+            creationDate: req.body.creationDate});
 
-});
+        try {
+            const blogpost = await blogPost.findByIdAndUpdate(req.params.id, updatedPost);
+            if (blogpost === null) {
+                return res.status(403).json("no blog post with this ID was found");
+            }
+            res.status(202).json({message: "blog post got updated!", blogpost: blogpost});
+        } catch(err) {
+            console.log("error")
+            return next(err);
+        }
+    })
+];
 
 exports.onePost_delete = (async (req, res, next) => {
-
-});
+        try {
+            const blogpost = await blogPost.findByIdAndDelete(req.params.id);
+            if (blogpost === null) {
+                return res.status(403).json("no blog post with this ID was found");
+            }
+            res.status(202).json({message: "blog post got deleted!", blogpost: blogpost});
+        } catch(err) {
+            console.log("error")
+            return next(err);
+        }
+    })
 
 exports.comments_get = (async (req, res, next) => {
 
