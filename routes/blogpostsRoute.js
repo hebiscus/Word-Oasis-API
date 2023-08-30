@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const blogPostController = require("../controllers/blogPostsController");
+const passport = require("passport");
 
-// router.get("/", blogPostController.posts_get);
+router.get("/", blogPostController.posts_get);
 
-// router.post("/", blogPostController.posts_create);
+router.post("/", passport.authenticate('jwt', { session: false }), blogPostController.posts_create);
 
 // router.get("/:postId", blogPostController.onePost_get);
 
