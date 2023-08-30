@@ -61,20 +61,21 @@ exports.onePost_update = [
     body("creationDate").isISO8601(),
     
     (async (req, res, next) => {
+        console.log("yup")
         const errors = validationResult(req);
         if(!errors.isEmpty()) {
             return res.status(403).json({errors: errors.array()})
         }
         
-        const updatedPost = new blogPost({
+        const updatedPost = {
             author: req.user,
             title: req.body.title,
             content: req.body.content,
             status: req.body.status,
-            creationDate: req.body.creationDate});
+            creationDate: req.body.creationDate};
 
         try {
-            const blogpost = await blogPost.findByIdAndUpdate(req.params.id, updatedPost);
+            const blogpost = await blogPost.findByIdAndUpdate(req.params.postId, updatedPost);
             if (blogpost === null) {
                 return res.status(403).json("no blog post with this ID was found");
             }
@@ -88,7 +89,7 @@ exports.onePost_update = [
 
 exports.onePost_delete = (async (req, res, next) => {
         try {
-            const blogpost = await blogPost.findByIdAndDelete(req.params.id);
+            const blogpost = await blogPost.findByIdAndDelete(req.params.postId);
             if (blogpost === null) {
                 return res.status(403).json("no blog post with this ID was found");
             }
