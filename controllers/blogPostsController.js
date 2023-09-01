@@ -3,12 +3,23 @@ const comment = require("../models/comment");
 const { body, validationResult } = require("express-validator");
 
 exports.posts_get = (async (req, res, next) => {
+    const {title, limit, sorting} = req.query;
+    const sortingValue = sorting === "ascending" ? 1 : -1; 
+
     try {
-        const allPosts = await blogPost.find();
-        if (allPosts.length === 0) {
+        if (title) {
+            const foundPost = await blogPost.findOne({title : title});
+            res.status(200).json(foundPost);
+        }
+        if (sorting) {
+            const foundPosts = await blogPost.find().limit(limit || 0).sort({creationDate: sortingValue});
+            res.status(200).json(foundPosts);
+        }
+        const foundPosts = await blogPost.find().limit(limit || 0);
+        if (foundPosts.length === 0) {
             res.json("no blog posts available yet");
         }
-        res.status(200).json({blogPosts: allPosts});
+        res.status(200).json({blogPosts: foundPosts});
     } catch(err) {
         return next(err);
     }
