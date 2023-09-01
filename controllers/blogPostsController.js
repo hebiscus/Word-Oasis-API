@@ -26,8 +26,8 @@ exports.posts_get = (async (req, res, next) => {
 });
 
 exports.posts_create = [
-    body("title").trim().escape().isLength({min: 2, max: 80}).withMessage("title should be between 2 and 80 characters"),
-    body("content").trim().escape().isLength({min: 2, max: 20000}).withMessage("blog post should be between 2 and 20 000 characters"),
+    body("title").trim().isLength({min: 2, max: 80}).withMessage("title should be between 2 and 80 characters"),
+    body("content").trim().isLength({min: 2, max: 20000}).withMessage("blog post should be between 2 and 20 000 characters"),
     body("status").isIn(["unpublished", "published"]).withMessage("invalid status value"),
     body("creationDate").isISO8601(),
     
@@ -66,8 +66,8 @@ exports.onePost_get = (async (req, res, next) => {
 });
 
 exports.onePost_update = [
-    body("title").trim().escape().isLength({min: 2, max: 80}).withMessage("title should be between 2 and 80 characters"),
-    body("content").trim().escape().isLength({min: 2, max: 20000}).withMessage("blog post should be between 2 and 20 000 characters"),
+    body("title").trim().isLength({min: 2, max: 80}).withMessage("title should be between 2 and 80 characters"),
+    body("content").trim().isLength({min: 2, max: 20000}).withMessage("blog post should be between 2 and 20 000 characters"),
     body("status").isIn(["unpublished", "published"]).withMessage("invalid status value"),
     body("creationDate").isISO8601(),
     
@@ -123,8 +123,8 @@ exports.comments_get = (async (req, res, next) => {
 });
 
 exports.comments_create = [
-    body("author").trim().escape().isLength({min: 1, max: 30}).withMessage("author's name should be between 1 and 30 characters"),
-    body("content").trim().escape().isLength({min: 3, max: 300}).withMessage("comment should be between 3 and 300 characters"),
+    body("author").trim().isLength({min: 1, max: 30}).withMessage("author's name should be between 1 and 30 characters"),
+    body("content").trim().isLength({min: 3, max: 300}).withMessage("comment should be between 3 and 300 characters"),
     
     (async (req, res, next) => {
         const errors = validationResult(req);
