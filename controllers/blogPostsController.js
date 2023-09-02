@@ -19,7 +19,7 @@ exports.posts_get = (async (req, res, next) => {
         if (foundPosts.length === 0) {
             res.json("no blog posts available yet");
         }
-        res.status(200).json({blogPosts: foundPosts});
+        res.status(200).json(foundPosts);
     } catch(err) {
         return next(err);
     }
@@ -59,7 +59,7 @@ exports.onePost_get = (async (req, res, next) => {
         if (blogpost === null) {
             return res.status(403).json("no blog post with this ID was found");
         }
-        res.status(202).json({blogpost: blogpost});
+        res.status(202).json(blogpost);
     } catch(err) {
         return next(err);
     }
@@ -116,7 +116,7 @@ exports.comments_get = (async (req, res, next) => {
         if (comments.length === 0) {
             return res.status(403).json("no comments found for this blog post");
         }
-        res.status(202).json({comments: comments});
+        res.status(202).json(comments);
     } catch(err) {
         return next(err);
     }
