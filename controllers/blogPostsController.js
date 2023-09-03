@@ -12,7 +12,7 @@ exports.posts_get = (async (req, res, next) => {
             res.status(200).json(foundPost);
         }
         if (sorting) {
-            const foundPosts = await blogPost.find().skip(1).limit(limit || 0).sort({creationDate: sortingValue});
+            const foundPosts = await blogPost.find().limit(limit || 0).sort({creationDate: sortingValue});
             res.status(200).json(foundPosts);
         }
         const foundPosts = await blogPost.find().skip(1).limit(limit || 0);
