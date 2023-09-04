@@ -54,8 +54,6 @@ exports.posts_create = [
 ];
 
 exports.onePost_get = (async (req, res, next) => {
-    console.log(req.params.id);
-    console.log(req.params.postId)
     try {
         const blogpost = await blogPost.findById(req.params.postId).populate("author").exec();
         if (blogpost === null) {
@@ -116,7 +114,7 @@ exports.comments_get = (async (req, res, next) => {
     try {
         const comments = await comment.find({blogpost: req.params.postId});
         if (comments.length === 0) {
-            return res.json("no comments found for this blog post");
+            return res.json({comments, message:"no comments found for this blog post"});
         }
         res.status(202).json(comments);
     } catch(err) {
