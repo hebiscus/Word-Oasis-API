@@ -116,7 +116,7 @@ exports.comments_get = (async (req, res, next) => {
         if (comments.length === 0) {
             return res.json({comments, message:"no comments found for this blog post"});
         }
-        res.status(202).json(comments);
+        res.status(202).json({comments, message:"comments were found"});
     } catch(err) {
         return next(err);
     }
