@@ -54,10 +54,12 @@ exports.posts_create = [
 ];
 
 exports.onePost_get = (async (req, res, next) => {
+    console.log(req.params.id);
+    console.log(req.params.postId)
     try {
-        const blogpost = await blogPost.findById(req.params.id).populate("author").exec();
+        const blogpost = await blogPost.findById(req.params.postId).populate("author").exec();
         if (blogpost === null) {
-            return res.status(403).json("no blog post with this ID was found");
+            return res.json("no blog post with this ID was found");
         }
         res.status(202).json(blogpost);
     } catch(err) {
@@ -114,7 +116,7 @@ exports.comments_get = (async (req, res, next) => {
     try {
         const comments = await comment.find({blogpost: req.params.postId});
         if (comments.length === 0) {
-            return res.status(403).json("no comments found for this blog post");
+            return res.json("no comments found for this blog post");
         }
         res.status(202).json(comments);
     } catch(err) {
