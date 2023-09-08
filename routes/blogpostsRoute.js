@@ -17,4 +17,6 @@ router.get("/:postId/comments", blogPostController.comments_get);
 
 router.post("/:postId/comments", blogPostController.comments_create);
 
+router.delete("/comments/:commentId/delete", blogPostController.comment_delete);
+
 module.exports = router;

@@ -105,7 +105,6 @@ exports.onePost_delete = (async (req, res, next) => {
         }
         res.status(202).json({message: "blog post got deleted!", blogpost: blogpost});
     } catch(err) {
-        console.log("error")
         return next(err);
     }
 })
@@ -149,3 +148,15 @@ exports.comments_create = [
         }
     })
 ];
+
+exports.comment_delete = (async (req, res, next) => {
+    try {
+        const foundComment = await comment.findByIdAndDelete(req.params.commentId);
+        if (foundComment == null) {
+            return res.status(403).json({message: "no comment with this ID was found", comment: null});
+        }
+        res.status(202).json({message: "comment was found!", comment: foundComment});
+    } catch(err) {
+        return next(err);
+    }
+})
