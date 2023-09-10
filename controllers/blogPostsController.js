@@ -53,7 +53,6 @@ exports.posts_create = [
                 const b64 = Buffer.from(req.file.buffer).toString("base64");
                 let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
                 const image = await uploadToCloudinary(dataURI, "blogpostImage");
-                console.log(image.url)
                 const newPost = new blogPost({
                     author: req.user,
                     title: req.body.title,
@@ -66,7 +65,6 @@ exports.posts_create = [
                 res.status(200).json("successfully created a blog post!")
             }
         } catch(err) {
-            console.log(err)
             return next(err);
         }
     })
@@ -110,7 +108,6 @@ exports.onePost_update = [
             }
             res.status(202).json({message: "blog post got updated!", blogpost: blogpost});
         } catch(err) {
-            console.log("error")
             return next(err);
         }
     })

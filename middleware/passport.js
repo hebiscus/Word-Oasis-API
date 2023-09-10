@@ -15,7 +15,6 @@ passport.use(new JwtStrategy(opts, (async(jwt_payload, done) => {
       }
       return done(null, admin);
   } catch(err) {
-    console.log(err)
     return done(err, false);
   }
 })));
