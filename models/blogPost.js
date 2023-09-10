@@ -5,6 +5,7 @@ const blogPostSchema = mongoose.Schema({
     title: {type: String, minlength: 2, maxlength: 80, required: true},
     content: {type: String, minlength: 2, maxlength: 20000, required: true},
     status: {type: String, enum: ["unpublished", "published"], required: true},
+    imageURL: String,
     creationDate: {type: Date, default: Date.now, required: true},
 });
 

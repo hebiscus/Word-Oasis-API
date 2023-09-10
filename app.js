@@ -21,7 +21,7 @@ const blogPostsRouter = require('./routes/blogpostsRoute');
     console.log(err);
   }
 })();
-
+        
 const app = express();
 
 app.use(cors());
