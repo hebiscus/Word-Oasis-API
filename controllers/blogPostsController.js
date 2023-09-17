@@ -18,13 +18,14 @@ exports.posts_get = (async (req, res, next) => {
         if (sorting) {
             const foundPosts = await blogPost.find().limit(limit || 0).sort({creationDate: sortingValue});
             if (foundPosts.length === 0) {
-                return res.status(403).res.json({message: "no blog posts available yet", foundPosts});
+                return res.status(403).json({message: "no blog posts available yet", foundPosts});
             }
             return res.status(200).json({message: "found some sorted blog posts!", foundPosts});
         }
         const foundPosts = await blogPost.find().skip(1).limit(limit || 0);
+        console.log(foundPosts)
         if (foundPosts.length === 0) {
-            return res.status(403).res.json({message: "no blog posts available yet", foundPosts});
+            return res.status(403).json({message: "no blog posts available yet", foundPosts});
         }
         res.status(200).json({message: "found some blog posts!", foundPosts});
     } catch(err) {
