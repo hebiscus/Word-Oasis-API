@@ -10,17 +10,23 @@ exports.posts_get = (async (req, res, next) => {
     try {
         if (title) {
             const foundPost = await blogPost.findOne({title : title});
-            res.status(200).json(foundPost);
+            if (!foundPost) {
+                return res.status(403).json({message: "no blog post with such title was found", foundPost});
+            }
+            return res.status(200).json({message: "blog post was found!", foundPost});
         }
         if (sorting) {
             const foundPosts = await blogPost.find().limit(limit || 0).sort({creationDate: sortingValue});
-            res.status(200).json(foundPosts);
+            if (foundPosts.length === 0) {
+                return res.status(403).res.json({message: "no blog posts available yet", foundPosts});
+            }
+            return res.status(200).json({message: "found some sorted blog posts!", foundPosts});
         }
         const foundPosts = await blogPost.find().skip(1).limit(limit || 0);
         if (foundPosts.length === 0) {
-            res.json("no blog posts available yet");
+            return res.status(403).res.json({message: "no blog posts available yet", foundPosts});
         }
-        res.status(200).json(foundPosts);
+        res.status(200).json({message: "found some blog posts!", foundPosts});
     } catch(err) {
         return next(err);
     }
@@ -28,7 +34,7 @@ exports.posts_get = (async (req, res, next) => {
 
 exports.posts_create = [
     body("title").trim().isLength({min: 2, max: 80}).withMessage("title should be between 2 and 80 characters"),
-    body("content").trim().isLength({min: 2, max: 20000}).withMessage("blog post should be between 2 and 20 000 characters"),
+    body("content").isArray({min: 1, max: 15}).withMessage("blog post should be between 2 and 30 000 characters, 2000 characters max for each paragraph"),
     body("status").isIn(["unpublished", "published"]).withMessage("invalid status value"),
     body("creationDate").isISO8601(),
     
@@ -129,7 +135,7 @@ exports.comments_get = (async (req, res, next) => {
     try {
         const comments = await comment.find({blogpost: req.params.postId});
         if (comments.length === 0) {
-            return res.json({comments, message:"no comments found for this blog post"});
+            return res.status(403).res.json({comments, message:"no comments found for this blog post"});
         }
         res.status(202).json({comments, message:"comments were found"});
     } catch(err) {
