@@ -81,9 +81,9 @@ exports.onePost_get = (async (req, res, next) => {
     try {
         const blogpost = await blogPost.findById(req.params.postId).populate("author").exec();
         if (blogpost === null) {
-            return res.json("no blog post with this ID was found");
+            return res.json({message: "no blog post with this ID was found", blogpost});
         }
-        res.status(202).json(blogpost);
+        res.status(202).json({message: "blog post was found!", blogpost});
     } catch(err) {
         return next(err);
     }
