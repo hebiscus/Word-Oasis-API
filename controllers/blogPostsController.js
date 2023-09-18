@@ -136,7 +136,7 @@ exports.comments_get = (async (req, res, next) => {
     try {
         const comments = await comment.find({blogpost: req.params.postId});
         if (comments.length === 0) {
-            return res.status(403).res.json({comments, message:"no comments found for this blog post"});
+            return res.status(403).json({comments, message:"no comments found for this blog post"});
         }
         res.status(202).json({comments, message:"comments were found"});
     } catch(err) {
