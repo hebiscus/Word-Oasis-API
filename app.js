@@ -1,12 +1,9 @@
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
-const bodyParser = require("body-parser");
 const logger = require('morgan');
 var cors = require('cors');
 require('dotenv').config();
 require('./middleware/passport');
-const passport = require('passport');
 const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
@@ -33,7 +30,6 @@ app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/admin', adminRouter);
