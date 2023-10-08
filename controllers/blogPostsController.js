@@ -90,10 +90,6 @@ exports.onePost_get = (async (req, res, next) => {
 });
 
 exports.onePost_update = [
-    // body("title").trim().isLength({min: 2, max: 80}).withMessage("title should be between 2 and 80 characters"),
-    // body("content").isArray({min: 1, max: 15}).withMessage("blog post should be between 2 and 30 000 characters, 2000 characters max for each paragraph"),
-    // body("status").isIn(["unpublished", "published"]).withMessage("invalid status value"),
-    // body("creationDate").isISO8601(),
     body("title").trim().isLength({min: 2, max: 80}).withMessage("title should be between 2 and 80 characters"),
     body("content").isArray({min: 1, max: 15}).withMessage("blog post should be between 2 and 30 000 characters, 2000 characters max for each paragraph"),
     body("status").isIn(["unpublished", "published"]).withMessage("invalid status value"),
@@ -102,6 +98,7 @@ exports.onePost_update = [
     (async (req, res, next) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()) {
+            console.log(req.body)
             return res.status(403).json({errors: errors.array()})
         }
         
