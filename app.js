@@ -34,19 +34,16 @@ app.use('/admin', adminRouter);
 app.use('/posts', blogPostsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(500).json('An internal server error occurred when processing your request, please try again or report the issue to site maintainer.');
+})
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+
 
 module.exports = app;
