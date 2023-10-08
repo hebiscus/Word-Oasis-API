@@ -24,7 +24,12 @@ const blogPostsRouter = require('./routes/blogpostsRoute');
         
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: ['https://word-oasis.vercel.app', 'http://localhost:5173', 'http://localhost:3000'],
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
