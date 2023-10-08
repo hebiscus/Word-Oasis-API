@@ -6,7 +6,6 @@ require('dotenv').config();
 require('./middleware/passport');
 const mongoose = require('mongoose');
 
-const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/adminRoute');
 const blogPostsRouter = require('./routes/blogpostsRoute');
 
@@ -31,7 +30,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/', indexRouter);
 app.use('/admin', adminRouter);
 app.use('/posts', blogPostsRouter);
 
