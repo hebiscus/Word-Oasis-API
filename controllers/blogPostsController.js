@@ -23,7 +23,6 @@ exports.posts_get = (async (req, res, next) => {
             return res.status(200).json({message: "found some sorted blog posts!", foundPosts});
         }
         const foundPosts = await blogPost.find().skip(1).limit(limit || 0);
-        console.log(foundPosts)
         if (foundPosts.length === 0) {
             return res.status(403).json({message: "no blog posts available yet", foundPosts});
         }
@@ -98,7 +97,6 @@ exports.onePost_update = [
     (async (req, res, next) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()) {
-            console.log(req.body)
             return res.status(403).json({errors: errors.array()})
         }
         
