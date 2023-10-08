@@ -28,7 +28,7 @@ exports.posts_get = (async (req, res, next) => {
         }
         res.status(200).json({message: "found some blog posts!", foundPosts});
     } catch(err) {
-        return next(err);
+        next(err);
     }
 });
 
@@ -71,7 +71,7 @@ exports.posts_create = [
                 res.status(200).json("successfully created a blog post!")
             }
         } catch(err) {
-            return next(err);
+            next(err);
         }
     })
 ];
@@ -84,7 +84,7 @@ exports.onePost_get = (async (req, res, next) => {
         }
         res.status(202).json({message: "blog post was found!", blogpost});
     } catch(err) {
-        return next(err);
+        next(err);
     }
 });
 
@@ -114,7 +114,7 @@ exports.onePost_update = [
             }
             res.status(202).json({message: "blog post got updated!", blogpost: blogpost});
         } catch(err) {
-            return next(err);
+            next(err);
         }
     })
 ];
@@ -139,7 +139,7 @@ exports.comments_get = (async (req, res, next) => {
         }
         res.status(202).json({comments, message:"comments were found"});
     } catch(err) {
-        return next(err);
+        next(err);
     }
 });
 
@@ -166,7 +166,7 @@ exports.comments_create = [
             await newComment.save();
             res.status(202).json({message: "comment successfully posted!", comment: newComment});
         } catch(err) {
-            return next(err);
+            next(err);
         }
     })
 ];
@@ -179,6 +179,6 @@ exports.comment_delete = (async (req, res, next) => {
         }
         res.status(202).json({message: "comment was found!", comment: foundComment});
     } catch(err) {
-        return next(err);
+        next(err);
     }
 })
