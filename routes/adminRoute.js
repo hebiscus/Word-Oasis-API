@@ -4,16 +4,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
 const Admin = require("../models/admin");
 
-// frontend admin get homepage
-router.get("/", (req, res) => {
-    res.json();
-});
-
-// testing protected route
-// router.get("/protected", passport.authenticate('jwt', { session: false }), (req, res) => {
-//     return res.status(200).json({success: "YAY! this is a protected Route"});
-// })
-
 //login route post
 router.post("/log-in", (async(req, res, next) => {
     let {name, password } = req.body;
