@@ -1,7 +1,6 @@
 const blogPost = require("../models/blogPost");
 const comment = require("../models/comment");
 const { body, validationResult } = require("express-validator");
-const uploadToCloudinary = require("../middleware/cloudinary");
 
 exports.posts_get = (async (req, res, next) => {
     const {title, limit, sorting} = req.query;
@@ -56,15 +55,12 @@ exports.posts_create = [
                 await newPost.save();
                 res.status(200).json("successfully created a blog post!")
             } else {
-                const b64 = Buffer.from(req.file.buffer).toString("base64");
-                let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-                const image = await uploadToCloudinary(dataURI, "blogpostImage");
                 const newPost = new blogPost({
                     author: req.user,
                     title: req.body.title,
                     content: req.body.content,
                     status: req.body.status,
-                    imageURL: image.url,
+                    imageURL: req.file.path,
                     creationDate: req.body.creationDate,
                 })
                 await newPost.save();
